@@ -38,8 +38,8 @@ class Geo:
         Save final result from geo
         """
 
-        j = json.dumps(self.__result)
-        with open(file_name, 'w', encoding='utf8') as f:
+        j = json.dumps(self.__result, ensure_ascii=False).encode('utf-8')
+        with open(file_name, 'wb') as f:
             f.write(j)
 
 
@@ -48,7 +48,7 @@ def open_features(file_name: str):
     open_features
     open geojson file and give features value
     """
-    with open(file_name, 'r', encoding='utf8') as dataset_file:
+    with open(file_name, 'r', encoding='utf-8') as dataset_file:
         dataset = json.loads(dataset_file.read())
     if 'features' not in dataset:
         return []
@@ -74,29 +74,13 @@ def main():
     print('province len:', len(province_features))
     print('cities len:', len(cities_features))
 
-    province = [{}]
-    cities = []
     result = Geo()
 
     for feature in cities_features:
         props = feature_properties(feature)
         result.append(props['province'], {
-            'coordinates': props['point']['coordinates']
-        })
-
-        cities.append({
             'name': props['city'],
-            'longitude': props['point']['coordinates'][0],
-            'latitude': props['point']['coordinates'][1],
-        })
-
-    for feature in province_features:
-        props = feature_properties(feature)
-
-        province.append({
-            'name': props['province_name'],
-            'latitude': 0,
-            'longitude': 0,
+            'coordinates': props['point']['coordinates']
         })
 
     result.save('result.json')
