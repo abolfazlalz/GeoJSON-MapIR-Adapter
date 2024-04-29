@@ -46,7 +46,6 @@ class Geo:
         Save final result from geo
         """
 
-        j = json.dumps(self.__result, ensure_ascii=False).encode('utf-8')
-        j = json.dumps(self.__result, ensure_ascii=False).encode('utf-8')
+        j = json.dumps(list(self.result().values()), ensure_ascii=False).encode('utf-8')
         with open(file_name, 'wb') as f:
             f.write(j)

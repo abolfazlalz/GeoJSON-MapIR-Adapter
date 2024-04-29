@@ -12,7 +12,7 @@ def main():
     result = Geo()
 
     for i in range(len(province_features)):
-        center = province_features.center_point(i)
+        center = list(map(lambda coordinate: str(coordinate), province_features.center_point(i)))
         props = province_features.properties(i)
         result.append(props['province_name'], center)
 
@@ -20,11 +20,10 @@ def main():
         props = city_features.properties(i)
         result.add_city(props['province'], {
             'name': props['city'],
-            'coordinates': props['point']['coordinates']
+            'coordinates': list(map(lambda coordinate: str(coordinate), props['point']['coordinates']))
         })
 
     result.save('result.json')
-    result.save_csv('result.csv')
 
 
 if __name__ == "__main__":
